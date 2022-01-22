@@ -13,11 +13,11 @@ const {API_HOST, API_PORT} = apiData;
 
 const App = () => {
 
-  const [upcomingWeek, setUpcomingWeek] = useState({});
-  const [priorityWeek, setPriorityWeek] = useState({});
-  const [priorityMonth, setPriorityMonth] = useState({});
+  const [upcomingWeek, setUpcomingWeek] = useState({ready: false});
+  const [priorityWeek, setPriorityWeek] = useState({ready: false});
+  const [priorityMonth, setPriorityMonth] = useState({ready: false});
   const { isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
-  const [all, setAll] = useState({});
+  const [all, setAll] = useState({ready: false});
   const [accessToken, setAccessToken] = useState(null);
 
   const getToken = async () => {
@@ -34,7 +34,7 @@ const App = () => {
 
   const makeRequest = async (path) => {
     const token = await getToken();
-    const res = await fetch(`http://${API_HOST}/${path}`, {
+    const res = await fetch(`${API_HOST}/${path}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -46,6 +46,7 @@ const App = () => {
   const updateState = async (method, data) => {
     var tmp = await data.json()
     tmp = JSON.parse(tmp)
+    tmp['ready'] = true;
     method(tmp);
   }
 
@@ -69,6 +70,9 @@ const App = () => {
 
   const getAll = async () => {
     const res = await makeRequest('assignments')
+    // console.log(res)
+    // console.log(await res.json())
+    // console.log(JSON.parse(await res.json()))
     updateState(setAll, res)
   }
 
@@ -86,7 +90,15 @@ const App = () => {
   }, []);
 
   if(isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="h-screen bg-gray-200">
+        <div class="h-screen flex justify-center items-center">
+          <div class="animate-spin inline-block w-8 h-8 border-black border-4 rounded-full text-3xl" role="status">
+            <span class="">.</span>
+          </div>
+        </div>
+      </div>
+    );
   }
   return (
     <>

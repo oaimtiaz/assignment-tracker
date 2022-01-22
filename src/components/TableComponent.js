@@ -15,7 +15,6 @@ const TableComponent = (props) => {
           });
           return accessToken;
         } catch (e) {
-          console.log(e.message);
           return null
         }
     }
@@ -23,7 +22,7 @@ const TableComponent = (props) => {
     const makeRequest = async (path, options) => {
         const token = await getToken();
         options['headers']['Authorization'] = `Bearer ${token}`;
-        const res = fetch(`http://${API_HOST}/${path}` , options)
+        const res = fetch(`${API_HOST}/${path}` , options)
         return res;
     }
 
@@ -32,7 +31,7 @@ const TableComponent = (props) => {
     }
 
     const impending = (deadline, priority) => {
-        return before(deadline, priority + 1);
+        return before(deadline, priority);
         
     }
 
@@ -40,7 +39,7 @@ const TableComponent = (props) => {
         if(priority === 1) {
             return false;
         }
-        return before(deadline, 2*priority + 2);
+        return before(deadline, priority + 2);
     }
 
     const before = (deadline, num_days) => {
@@ -68,31 +67,32 @@ const TableComponent = (props) => {
 
     const getColor = (index) => {
         const assignment = props.data[index];
-        if (assignment['Done']) {
+        if (assignment['done']) {
             return 'bg-green-500';
-        } else if (late(assignment['Due Date'])) {
+        } else if (late(assignment['due'])) {
             return 'bg-black text-white';
-        } else if(impending(assignment['Due Date'], assignment['Importance (1-5)'])) {
+        } else if(impending(assignment['due'], assignment['priority'])) {
             return "bg-red-500";
-        } else if(upcoming(assignment['Due Date'], assignment['Importance (1-5)'])) {
+        } else if(upcoming(assignment['due'], assignment['priority'])) {
             return "bg-yellow-500";
         }
     }
 
     const getRows = () => {
-        console.log(props.children)
-        console.log(props.data)
         if(props.data) {
             return Object.keys(props.data).map((index) => {
+                if(isNaN(index)) {
+                    return ""
+                }
                 return (
                     <tr key={index} className={`hover:bg-slate-200 transition-all w-full ${getColor(index)}`}>
-                        <td className="">{props.data[index]['ID']}</td>
-                        <td className="">{props.data[index]['Course']}</td>
-                        <td className="">{props.data[index]['Assignment Name']}</td>
-                        <td className="">{props.data[index]['Importance (1-5)']}</td>
-                        <td className="">{props.data[index]['Due Date']}</td>
-                        <td onClick={() => submit(props.data[index]['ID'])} className="py-0 my-0 pl-4 hover:cursor-pointer">{props.data[index]['Done'] ? "Yes" : "No"}</td>
-                
+                        <td className="">{props.data[index]['id']}</td>
+                        <td className="">{props.data[index]['subject']}</td>
+                        <td className="">{props.data[index]['name']}</td>
+                        <td className="">{props.data[index]['priority']}</td>
+                        <td className="">{props.data[index]['due']}</td>
+                        <td onClick={() => submit(props.data[index]['id'])} className="py-0 my-0 pl-4 hover:cursor-pointer">{props.data[index]['done'] ? "Yes" : "No"}</td>
+            
                     </tr>
                 )
             })
@@ -119,7 +119,15 @@ const TableComponent = (props) => {
                             </tr>
                         </thead>
                         <tbody className="text-lg w-full">
-                            {getRows()}
+                            {!props.data['ready'] ? (
+                                <>
+                                    <tr className="w-max h-max flex justify-center items-center">
+                                        <div className="w-max h-max flex justify-center items-center font-bold text-xl">Loading...</div>
+                                    </tr>
+                                    
+                                </>
+                                
+                                ):  (getRows())}
                         </tbody>
                     </table>
                 </div>

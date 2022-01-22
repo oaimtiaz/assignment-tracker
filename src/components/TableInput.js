@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import FormInput from "./FormInput";
 import apiData from "./ApiData";
@@ -54,7 +54,7 @@ const TableInput = (props) => {
             setAction(a);
             resetState()
             if(a === EDIT) {
-                const e = {target: {value: props.data[0]['ID']}}
+                const e = {target: {value: props.data[0]['id']}}
                 changeId(e);
             }
         }
@@ -70,6 +70,10 @@ const TableInput = (props) => {
             completed: false,
         })
     }
+
+    useEffect(() => {
+        resetState();
+    }, []);
 
 
     const handleChange = (e) => {
@@ -90,14 +94,13 @@ const TableInput = (props) => {
     const getAssignment = (id) => {
         const assignments = props.data;
         for(let key in assignments) {
-            if(assignments[key]['ID'] === id) {
+            if(assignments[key]['id'] === id) {
                 return assignments[key];
             }
         }
     }
 
     const changeId = (e) => {
-        console.log("Changing ID")
         let id = parseInt(e.target.value);
         if(id < 0) {
             setState({
@@ -111,11 +114,11 @@ const TableInput = (props) => {
             setValidId(true);
             setState({
                 ...state,
-                course: assignment['Course'],
-                assignment: assignment['Assignment Name'],
-                dueDate: convertDate(new Date(assignment['Due Date'])),
-                priority: assignment['Importance (1-5)'],
-                completed: assignment['Completed'],
+                course: assignment['subject'],
+                assignment: assignment['name'],
+                dueDate: convertDate(new Date(assignment['due'])),
+                priority: assignment['priority'],
+                completed: assignment['done'],
                 id: id
             })
         } else {
