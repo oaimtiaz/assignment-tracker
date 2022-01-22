@@ -111,8 +111,8 @@ const TableComponent = (props) => {
                         <thead>
                             <tr className="">
                                 <th className="justify-start  ">ID</th>
-                                <th className="justify-start  ">Course</th>
-                                <th className="justify-start  ">Assignment</th>
+                                <th className="justify-start  ">Subject</th>
+                                <th className="justify-start  ">Name</th>
                                 <th className="justify-start ">Priority</th>
                                 <th className="justify-start ">Due Date</th>
                                 <th className="justify-start ">Done</th>
