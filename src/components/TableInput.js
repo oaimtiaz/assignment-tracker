@@ -38,7 +38,7 @@ const TableInput = (props) => {
     const makeRequest = async (path, options) => {
         const token = await getToken();
         options['headers']['Authorization'] = `Bearer ${token}`;
-        const res = fetch(`http://${API_HOST}/${path}` , options)
+        const res = fetch(`${API_HOST}/${path}` , options)
         return res;
     }
 

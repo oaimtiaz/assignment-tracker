@@ -9,7 +9,7 @@ import AuthButton from "./components/AuthComponents/AuthButton";
 import { useAuth0 } from "@auth0/auth0-react";
 import LoginPage from "./components/LoginPage";
 
-const {API_HOST, API_PORT} = apiData;
+const {API_HOST} = apiData;
 
 const App = () => {
 
@@ -18,7 +18,6 @@ const App = () => {
   const [priorityMonth, setPriorityMonth] = useState({ready: false});
   const { isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
   const [all, setAll] = useState({ready: false});
-  const [accessToken, setAccessToken] = useState(null);
 
   const getToken = async () => {
     try {
