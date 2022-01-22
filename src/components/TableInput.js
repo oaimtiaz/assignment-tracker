@@ -173,8 +173,6 @@ const TableInput = (props) => {
 
     const addPage = (props) => {
         const add = async (e) => {
-            e.preventDefault();
-            console.log("ADDING!!!");
             const requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -183,7 +181,6 @@ const TableInput = (props) => {
                 body: JSON.stringify(state),
                 
             }
-            console.log("ADDING");
             const res = await makeRequest('add', requestOptions);
             const tmp = res.json;
         }
