@@ -78,6 +78,7 @@ const App = () => {
 
 
   useEffect(() => {
+    document.title = "Assignment Tracker";
     const tmp = async () => {
 
       await getUpcomingWeek();
